@@ -71,7 +71,7 @@ public class TCPServer {
                                         byte[] dataToSend = msgToSend.getBytes();
                                         output.write(dataToSend);
                                     }
-
+                                    break;
                                 case "DATA":
                                     String msgToSend = msgIn;
                                     byte[] dataToSend = msgToSend.getBytes();
@@ -94,7 +94,7 @@ public class TCPServer {
                                     client.setImav(imav);
                                     break;
                                 case "QUIT":
-                                    System.out.println(client.getUsername() + " has left the server");
+                                    System.out.println("CLIENT LEFT SERVER (Client: " + client.getUsername() + ")");
                                     clientList.remove(client);
                                     sendClientList(clientList);
                                     socket.close();
@@ -106,7 +106,13 @@ public class TCPServer {
                                     break;
                             }
                         } catch (IOException | InterruptedException e) {
-                            System.out.println("CLIENT CONNECTION CLOSED");
+                            System.out.println("CLIENT CONNECTION CLOSED (Client: " + client.getUsername() + ")");
+                            try {
+                                socket.close();
+                                clientList.remove(client);
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
                         }
                     }
                 });

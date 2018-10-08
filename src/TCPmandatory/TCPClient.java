@@ -43,7 +43,6 @@ public class TCPClient {
                     username = sc.next();
                 }
                 while(!checkUsername(username));
-                Thread.sleep(100);
                 String msgToSend = "JOIN " + username + ", " + IP_SERVER_STR + ":" + PORT_SERVER;
                 byte[] dataToSend = msgToSend.getBytes();
                 output.write(dataToSend);
@@ -71,7 +70,7 @@ public class TCPClient {
                             String imav = "IMAV";
                             byte[] dataToSend = imav.getBytes();
                             output.write(dataToSend);
-                            Thread.sleep(150000);
+                            Thread.sleep(30000);
                         }
                     } catch (InterruptedException | IOException e) {
                         try {
@@ -166,7 +165,7 @@ public class TCPClient {
                         System.out.println("\n----AVAILABLE CLIENT COMMANDS----\nDATA (Send data to other clients)\nQUIT (Quit the system)\n");
                         break;
                     default:
-                        System.out.println("****COMMAND NOT RECOGNIZED*****\n");
+                        System.out.println("****COMMAND NOT RECOGNIZED****\n");
                         break;
                 }
             }
@@ -181,7 +180,7 @@ public class TCPClient {
         if (username.length() <= 12 && username.matches("[A-Za-z0-9_-]+")){
            return true;
         }else
-            System.out.println("E200: INVALID USERNAME");
+            System.out.println("****E200: INVALID USERNAME****");
             return false;
     }
 }
