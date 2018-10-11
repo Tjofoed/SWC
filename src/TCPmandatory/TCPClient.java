@@ -16,10 +16,10 @@ public class TCPClient {
         System.out.println("=============CLIENT==============");
         String username;
         Scanner sc = new Scanner(System.in);
-        final int PORT_SERVER = 5656; //INTERN
-    //    final int PORT_SERVER = 4545; //EXTERN
+    //    final int PORT_SERVER = 5656; //INTERN
+        final int PORT_SERVER = 4545; //EXTERN
     //    final String IP_SERVER_STR = "127.0.0.1"; //INTERN
-        final String IP_SERVER_STR = "172.16.16.168"; //EXTERN
+        final String IP_SERVER_STR = "172.16.20.144"; //EXTERN
 
         try {
             InetAddress ip = InetAddress.getByName(IP_SERVER_STR);
@@ -34,6 +34,7 @@ public class TCPClient {
             System.out.println("----JOIN----");
             System.out.println("Username must be a maximum of 12 characters and may only contain letters, digits, '-' and '_'.");
             boolean joinCheck = true;
+
 
             do {
                 InputStream input = socket.getInputStream();
@@ -115,7 +116,7 @@ public class TCPClient {
 
             Thread checkConnection = new Thread(() -> {
                 while(true) {
-                    if (socket.isClosed()) {
+                    if (socket.isClosed() || !socket.isConnected()) {
                         System.out.println("CONNECTION TO SERVER LOST");
                         System.exit(1);
                     }
@@ -174,7 +175,7 @@ public class TCPClient {
         } catch (ConnectException e){
             System.out.println("****CONNECTION TO SERVER COULD NOT BE ESTABLISHED****");
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("****CONNECTION TO SERVER LOST****");
         }
     }
 
