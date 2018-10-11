@@ -15,7 +15,7 @@ public class TCPServer {
 
         System.out.println("=============SERVER==============");
 
-        final int PORT_LISTEN = 5656;
+        final int PORT_LISTEN = 5757;
 
         try {
             ServerSocket server = new ServerSocket(PORT_LISTEN);
@@ -44,66 +44,72 @@ public class TCPServer {
                             input.read(dataIn);
                             String msgIn = new String(dataIn);
                             msgIn = msgIn.trim();
-
-                            String commandChoice = msgIn.substring(0, 4);
-                            switch (commandChoice) {
-                                case "JOIN":
-                                    String username = (msgIn.substring(5, msgIn.indexOf(",")));
-                                    if (checkUsername(username)) {
-                                        for (int i = 0; i < clientList.size(); i++) {
-                                            if (clientList.get(i).getUsername().equalsIgnoreCase(username)) {
-                                                String msgToSend = "J_ER E100: USERNAME ALREADY EXISTS";
-                                                byte[] dataToSend = msgToSend.getBytes();
-                                                output.write(dataToSend);
-                                                break;
-                                            } else {
-                                                client.setUsername(username);
-                                                String msgToSend = "J_OK";
-                                                byte[] dataToSend = msgToSend.getBytes();
-                                                output.write(dataToSend);
-                                                Thread.sleep(500);
-                                                sendClientList(clientList);
-                                                break;
+                            String commandChoice = null;
+                            try {
+                                commandChoice = msgIn.substring(0, 4);
+                                switch (commandChoice) {
+                                    case "JOIN":
+                                        String username = (msgIn.substring(5, msgIn.indexOf(",")));
+                                        if (checkUsername(username)) {
+                                            for (int i = 0; i < clientList.size(); i++) {
+                                                if (clientList.get(i).getUsername().equalsIgnoreCase(username)) {
+                                                    String msgToSend = "J_ER E100: USERNAME ALREADY EXISTS";
+                                                    byte[] dataToSend = msgToSend.getBytes();
+                                                    output.write(dataToSend);
+                                                    break;
+                                                } else {
+                                                    client.setUsername(username);
+                                                    String msgToSend = "J_OK";
+                                                    byte[] dataToSend = msgToSend.getBytes();
+                                                    output.write(dataToSend);
+                                                    Thread.sleep(500);
+                                                    sendClientList(clientList);
+                                                    break;
+                                                }
                                             }
+                                        } else {
+                                            String msgToSend = "J_ER E200: INVALID USERNAME";
+                                            byte[] dataToSend = msgToSend.getBytes();
+                                            output.write(dataToSend);
                                         }
-                                    } else {
-                                        String msgToSend = "J_ER E200: INVALID USERNAME";
+                                        break;
+                                    case "DATA":
+                                        String msgToSend = msgIn;
                                         byte[] dataToSend = msgToSend.getBytes();
-                                        output.write(dataToSend);
-                                    }
-                                    break;
-                                case "DATA":
-                                    String msgToSend = msgIn;
-                                    byte[] dataToSend = msgToSend.getBytes();
-                                    for (int i = 0; i < clientList.size(); i++) {
-                                        output = clientList.get(i).getSocket().getOutputStream();
-                                        output.write(dataToSend);
-                                    }
-                                    if(msgToSend.substring(0,4).equalsIgnoreCase("DATA")) {
-                                        System.out.println(msgToSend.substring(5));
-                                    }
-                                    break;
-                                case "IMAV":
-                                    long imav = (System.currentTimeMillis() / 1000);
-                                    if (client.getImav() == 0) {
+                                        for (int i = 0; i < clientList.size(); i++) {
+                                            output = clientList.get(i).getSocket().getOutputStream();
+                                            output.write(dataToSend);
+                                        }
+                                        if (msgToSend.substring(0, 4).equalsIgnoreCase("DATA")) {
+                                            System.out.println(msgToSend.substring(5));
+                                        }
+                                        break;
+                                    case "IMAV":
+                                        long imav = (System.currentTimeMillis() / 1000);
+                                        if (client.getImav() == 0) {
+                                            client.setImav(imav);
+                                            System.out.println(msgIn + " received from " + client.getUsername());
+                                        } else {
+                                            System.out.println(msgIn + " received from " + client.getUsername() + " " + (imav - client.getImav()) + " seconds after last IMAV");
+                                        }
                                         client.setImav(imav);
-                                        System.out.println(msgIn + " received from " + client.getUsername());
-                                    } else {
-                                        System.out.println(msgIn + " received from " + client.getUsername() + " " + (imav - client.getImav()) + " seconds after last IMAV");
-                                    }
-                                    client.setImav(imav);
-                                    break;
-                                case "QUIT":
-                                    System.out.println("CLIENT LEFT SERVER (Client: " + client.getUsername() + ")");
-                                    clientList.remove(client);
-                                    sendClientList(clientList);
-                                    socket.close();
-                                    break;
-                                default:
-                                    msgToSend = "J_ER E400: Command not recognized";
-                                    dataToSend = msgToSend.getBytes();
-                                    output.write(dataToSend);
-                                    break;
+                                        break;
+                                    case "QUIT":
+                                        System.out.println("CLIENT LEFT SERVER (Client: " + client.getUsername() + ")");
+                                        clientList.remove(client);
+                                        sendClientList(clientList);
+                                        socket.close();
+                                        break;
+                                    default:
+                                        msgToSend = "J_ER E400: Command not recognized";
+                                        dataToSend = msgToSend.getBytes();
+                                        output.write(dataToSend);
+                                        break;
+                                }
+                            } catch (StringIndexOutOfBoundsException e) {
+                                String msgToSend = "J_ER E400: COMMAND NOT RECOGNIZED";
+                                byte[] dataToSend = msgToSend.getBytes();
+                                output.write(dataToSend);
                             }
                         } catch (IOException | InterruptedException e) {
                             System.out.println("CLIENT CONNECTION CLOSED (Client: " + client.getUsername() + ")");
@@ -125,7 +131,7 @@ public class TCPServer {
                             for (int i = 0; i < clientList.size(); i++) {
                                 long imav = (System.currentTimeMillis() / 1000);
                                 // checks if imav difference is below 70sec
-                                if(clientList.get(i).getImav() > 0) {
+                                if (clientList.get(i).getImav() > 0) {
                                     if (imav - clientList.get(i).getImav() > 70) {
                                         System.out.println(clientList.get(i).getUsername() + " has been removed after being inactive for " + (imav - clientList.get(i).getImav()) + " seconds");
                                         clientList.get(i).getSocket().close();
@@ -164,9 +170,9 @@ public class TCPServer {
                 OutputStream output = tempList.get(i).getSocket().getOutputStream();
                 output.write(dataToSend);
             }
-            if (tempList.size() == 0){
+            if (tempList.size() == 0) {
                 System.out.println("Clients online: None");
-            }else {
+            } else {
                 System.out.println("Clients online: " + msgToSend.substring(5));
             }
         } catch (IOException e) {

@@ -18,8 +18,8 @@ public class TCPClient {
         Scanner sc = new Scanner(System.in);
         final int PORT_SERVER = 5656; //INTERN
     //    final int PORT_SERVER = 4545; //EXTERN
-        final String IP_SERVER_STR = "127.0.0.1"; //INTERN
-    //    final String IP_SERVER_STR = "172.16.20.144"; //EXTERN
+    //    final String IP_SERVER_STR = "127.0.0.1"; //INTERN
+        final String IP_SERVER_STR = "172.16.16.168"; //EXTERN
 
         try {
             InetAddress ip = InetAddress.getByName(IP_SERVER_STR);
@@ -137,10 +137,12 @@ public class TCPClient {
                         String data;
                         do {
                             data = sc.nextLine();
-                            String msgToSend = "DATA " + username + ": " + data + "\n";
-                            byte[] dataToSend = msgToSend.getBytes();
-                            if (data.length() < 250) {
-                                output.write(dataToSend);
+                            if(!data.equals("BACK")) {
+                                String msgToSend = "DATA " + username + ": " + data + "\n";
+                                byte[] dataToSend = msgToSend.getBytes();
+                                if (data.length() < 250) {
+                                    output.write(dataToSend);
+                                }
                             }
                             Thread.sleep(200);
                         } while (!data.equalsIgnoreCase("BACK") && data.length() < 250);
