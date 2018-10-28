@@ -72,7 +72,7 @@ public class main {
         String htmlString = "";
 
         while(html.hasNextLine()){
-            htmlString += html.nextLine();
+            htmlString += html.nextLine().replace("&#039;", "'");
         }
 
         while(names.hasNextLine()){
