@@ -15,7 +15,7 @@ public class TCPServer {
 
         System.out.println("=============SERVER==============");
 
-        final int PORT_LISTEN = 5757;
+        final int PORT_LISTEN = 5656;
 
         try {
             ServerSocket server = new ServerSocket(PORT_LISTEN);
@@ -67,6 +67,7 @@ public class TCPServer {
                                                     break;
                                                 }
                                             }
+                                            client.setUsername(username);
                                         } else {
                                             String msgToSend = "J_ER E200: INVALID USERNAME";
                                             byte[] dataToSend = msgToSend.getBytes();

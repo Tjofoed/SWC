@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 
@@ -16,10 +17,11 @@ public class TCPClient {
         System.out.println("=============CLIENT==============");
         String username;
         Scanner sc = new Scanner(System.in);
-    //    final int PORT_SERVER = 5656; //INTERN
-        final int PORT_SERVER = 4545; //EXTERN
-    //    final String IP_SERVER_STR = "127.0.0.1"; //INTERN
-        final String IP_SERVER_STR = "172.16.20.144"; //EXTERN
+      //  final int PORT_SERVER = 5757; //INTERN
+        final int PORT_SERVER = 5656; //EXTERN
+       // final String IP_SERVER_STR = "127.0.0.1"; //INTERN
+       final String IP_SERVER_STR = "172.16.19.196"; //EXTERN
+
 
         try {
             InetAddress ip = InetAddress.getByName(IP_SERVER_STR);
@@ -118,7 +120,7 @@ public class TCPClient {
                 while(true) {
                     if (socket.isClosed() || !socket.isConnected()) {
                         System.out.println("CONNECTION TO SERVER LOST");
-                        System.exit(1);
+                        System.exit(0);
                     }
                 }
             });
@@ -159,7 +161,7 @@ public class TCPClient {
                             String msgToSend = "QUIT";
                             byte[] dataToSend = msgToSend.getBytes();
                             output.write(dataToSend);
-                            System.exit(1);
+                            System.exit(0);
                         }catch (IOException e) {
                             socket.close();
                         }
@@ -195,46 +197,46 @@ class Client {
     private long imav = 0;
     private Socket socket;
 
-    public Client() {
+    Client() {
     }
 
-    public String getIpAddress() {
+    String getIpAddress() {
         return ipAddress;
     }
 
-    public void setIpAddress(String ipAddress) {
+    void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
-    public int getPortNumber() {
+    int getPortNumber() {
         return portNumber;
     }
 
-    public void setPortNumber(int portNumber) {
+    void setPortNumber(int portNumber) {
         this.portNumber = portNumber;
     }
 
-    public String getUsername() {
+    String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    void setUsername(String username) {
         this.username = username;
     }
 
-    public long getImav() {
+    long getImav() {
         return imav;
     }
 
-    public void setImav(long imav) {
+    void setImav(long imav) {
         this.imav = imav;
     }
 
-    public Socket getSocket() {
+    Socket getSocket() {
         return socket;
     }
 
-    public void setSocket(Socket socket) {
+    void setSocket(Socket socket) {
         this.socket = socket;
     }
 
