@@ -45,7 +45,7 @@ public class Server
         try
         {
             System.out.println("****SERVICE STARTED****");
-            String path = "C:\\Users\\mikke_000\\iCloudDrive\\3 semester\\ChatTest\\src\\WEBserver\\";
+            String path = "C:\\Users\\Kofoed\\iCloudDrive\\3 semester\\ChatTest\\src\\WEBserver\\";
             String requestMessageLine;
             String fileName;
 
@@ -86,56 +86,56 @@ public class Server
                 inFile.read(fileInBytes);
                 inFile.close();  //***** remember to close the file after usage *****
                 outToClient.writeBytes("HTTP/1.0 200 OK\r\n");
-                outToClient.write(("Date:" + new Date() + "\r\n").getBytes());
-                outToClient.write("Server: Mikkels server\r\n".getBytes());
+                outToClient.writeBytes("Date:" + new Date() + "\r\n");
+                outToClient.writeBytes("Server: Mikkels server\r\n");
 
 
                 if (fileName.endsWith(".jpg")) {
-                    outToClient.write("Content-Type:image/jpeg\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:image/jpeg\r\n");
                 }
 
                 if (fileName.endsWith(".jpeg")) {
-                    outToClient.write("Content-Type:image/jpeg\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:image/jpeg\r\n");
                 }
 
                 if (fileName.endsWith(".svg")) {
-                    outToClient.write("Content-Type:vector/svg\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:vector/svg\r\n");
                 }
 
                 if (fileName.endsWith(".html")) {
-                    outToClient.write("Content-Type:text/html\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:text/html\r\n");
                 }
 
                 if (fileName.endsWith(".gif")) {
-                    outToClient.write("Content-Type:image/gif\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:image/gif\r\n");
                 }
 
                 if (fileName.endsWith(".txt")) {
-                    outToClient.write("Content-Type:text/txt\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:text/txt\r\n");
                 }
 
                 if (fileName.endsWith(".mov")) {
-                    outToClient.write("Content-Type:video/mov\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:video/mov\r\n");
                 }
 
                 if (fileName.endsWith(".rar")) {
-                    outToClient.write("Content-Type:archive/rar\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:archive/rar\r\n");
                 }
 
                 if (fileName.endsWith(".zip")) {
-                    outToClient.write("Content-Type:archive/zip\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:archive/zip\r\n");
                 }
 
                 if (fileName.endsWith(".png")) {
-                    outToClient.write("Content-Type:image/png\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:image/png\r\n");
                 }
 
                 if (fileName.endsWith(".doc")) {
-                    outToClient.write("Content-Type:text/doc\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:text/doc\r\n");
                 }
 
                 if (fileName.endsWith(".mp4")) {
-                    outToClient.write("Content-Type:video/mp4\r\n".getBytes());
+                    outToClient.writeBytes("Content-Type:video/mp4\r\n");
                 }
 
                 outToClient.writeBytes("Content-Length: " + numOfBytes + "\r\n");
